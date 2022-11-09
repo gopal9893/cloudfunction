@@ -4,7 +4,6 @@ from models import Users
 
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from typing import List
 from fastapi.responses import JSONResponse
 Base.metadata.create_all(bind=engine)
 
@@ -29,11 +28,11 @@ class UserSchema(BaseModel):
 class UserCreateSchema(UserSchema):
     passaword:str
 
-@app.get("/users",response_model=List[UserCreateSchema])
-def get_users(db: Session = Depends(get_db)):
-    return db.query(Users).all()
+@app.get("/user/{user_id}")
+async def get_user():
+    return {"Hello": "world"}
 
-@app.post("/users",response_model=UserSchema)
+@app.post("/api/users",response_model=UserSchema)
 def create_users(user:UserCreateSchema, db: Session = Depends(get_db)):
     u=Users(name=user.name, phoneNumber=user.phoneNumber, dob=user.dob, gender=user.gender)
     db.add(u)
