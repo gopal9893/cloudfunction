@@ -10,3 +10,4 @@ COPY . ./
 RUN pip install -r requirements.txt
 # Run
 CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 dbconnection:app
+#CMD ["uvicorn", "app.__dbconnection__:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from database import Base,SessionLocal,engine
 from models import Users
+from typing import List
 
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -28,9 +29,11 @@ class UserSchema(BaseModel):
 class UserCreateSchema(UserSchema):
     passaword:str
 
-@app.get("/user/{user_id}")
-async def get_user():
-    return {"Hello": "world"}
+
+@app.get("/alergies", response_model=List[UserSchema])
+def get_alergies(id: int = 0, name: int = 10, db: Session = Depends(get_db)):
+    return get_alergies(db, id=id, name=name)
+
 
 @app.post("/api/users",response_model=UserSchema)
 def create_users(user:UserCreateSchema, db: Session = Depends(get_db)):
@@ -61,7 +64,4 @@ def delete_user(user_id:int,db:Session=Depends(get_db)):
         return {f"user of id {user_id} has been deleted":True}
     except:
         return HTTPException(status_code=404,detail="user not found")
-
-
-
 
